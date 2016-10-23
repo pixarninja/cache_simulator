@@ -49,11 +49,13 @@ int main(int argc, char *argv[])
     ifstream trace_stream;
     trace_stream.open(argv[2]);
 
+    /* parse config file */
     while(config_stream >> line) {
         config.push_back(stoi(line));
         config_size++;
     }
 
+    /* parse trace file */
     while(trace_stream >> sub_type >> sub_address >> sub_access) {
         type.push_back(sub_type);
         address.push_back(stoul(sub_address, nullptr, 16));
@@ -73,6 +75,7 @@ int main(int argc, char *argv[])
         cout << type[i] << " " << address[i] << " " << access[i] << endl;
     }
 
+    /* setup output file */
     ofstream output;
     string output_filename = argv[2];
     string tmp = argv[2];
@@ -85,6 +88,7 @@ int main(int argc, char *argv[])
     output_filename.append(".out");
     output.open(output_filename);
     
+    /* write to output file */
     for(i = 0; i < config_size; i++) {
         output << config[i] << endl;
     }
