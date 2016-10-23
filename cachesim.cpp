@@ -22,8 +22,12 @@
 
 using namespace std;
 
-int main(void)
+int main(int argc, char *argv[])
 {
+    if(argc < 3) {
+        cout << "Please enter the config file followed by the trace file. " << endl << "Exiting Program. Good day." << endl;
+        exit(EXIT_FAILURE);
+    }    
     Cache cache;
     cache.cache();
     vector<char> type;
@@ -40,10 +44,10 @@ int main(void)
     int address_size = 32;
     
     ifstream config_stream;
-    config_stream.open("sample_config");
+    config_stream.open(argv[1]);
 
     ifstream trace_stream;
-    trace_stream.open("sample_trace");
+    trace_stream.open(argv[2]);
 
     while(config_stream >> line) {
         config.push_back(stoi(line));
@@ -60,17 +64,26 @@ int main(void)
     cache.initialize(config);
     cache.calculate_bits(address_size);
 
-    /* printing debug 
+    /* printing debug */
     cout << "offset = " << cache.offset << endl;
     cout << "index = " << cache.index << endl;
     cout << "tag = " << cache.tag << endl;
     cout << endl;
     for(i = 0; i < trace_size; i++) {
         cout << type[i] << " " << address[i] << " " << access[i] << endl;
-    }*/
+    }
 
     ofstream output;
-    output.open("cache.out");
+    string output_filename = argv[2];
+    string tmp = argv[2];
+    string delim = "/";
+    size_t pos;
+    while((pos = tmp.find(delim)) != string::npos) {
+        output_filename = tmp.substr(pos + 1, tmp.length());
+        tmp.erase(0, pos + delim.length());
+    }
+    output_filename.append(".out");
+    output.open(output_filename);
     
     for(i = 0; i < config_size; i++) {
         output << config[i] << endl;
