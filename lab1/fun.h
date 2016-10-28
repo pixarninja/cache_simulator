@@ -9,12 +9,13 @@
 #include <bitset>
 
 #include <tgmath.h>
+#include <time.h>
 
 class Cache
 {
     public:
         void cache();
-        void initialize(std::vector<int> config);
+        void configure(std::vector<int> config);
         void calculate_bits(int address_size);
         
         int block_size;
@@ -28,6 +29,33 @@ class Cache
         unsigned int offset;
         unsigned int index;
         unsigned int tag;
+
+        /* data collection for ouput file */
+        unsigned int load_hits;
+        unsigned int load_misses;
+        unsigned int store_hits;
+        unsigned int store_misses;
+        unsigned int total_hits;
+        unsigned int total_misses;
+        unsigned int clock_cycles;
+};
+
+class Tag
+{
+    public:
+        int tag;
+        int index;
+        bool dirty;
+};
+
+class Data
+{
+    public:
+        void data();
+        void initialize(int ways, int max);
+        
+        Tag *tag;
+        int largest;
 };
 
 #endif
