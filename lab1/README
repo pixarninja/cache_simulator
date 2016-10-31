@@ -1,1 +1,31 @@
-Plz uze "make" and den run wit dee files
+Description: Implements a cache simulator and calculates the
+following quantities:
+
+	- Total Hit Rate
+	- Load Hit Rate
+	- Store Hit Rate
+	- Total Run Time
+	- Average Memory Access Latency
+
+Author: Harris, Mark
+ 
+Class:		CSE 331
+Instructor:	Zheng
+Assignment:	Lab Project #1
+ 
+Assigned:	Oct 17, 2016
+Assignmed:	Oct 17, 2016
+Due:		Oct 31, 2016
+
+Compilation and Execution Instructions:
+
+1. To compile, run the "make" command. The program uses the g++
+   compiler with the c++11 build and some debugging flags. I have
+   tested compilation on rainbow@nmt.edu and it successfully creates
+   the executable file.
+
+2. To run, type the executable name as you would any other
+   executable (i.e. ./cachesim) followed by the configuration file
+   path and the trace file path. The program will output a *.out
+   file containing the requested quantities (5 lines in total) in
+   the same order as they were in the PDF.

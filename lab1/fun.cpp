@@ -1,3 +1,23 @@
+/************************************************************************
+ *
+ *	filename: fun.cpp
+ *
+ *	description: Holds methods and classes for the cache simulator.
+ *
+ *	author: Harris, Mark
+ *
+ *	class:		CSE 331
+ *	instructor:	Zheng
+ *	assignment:	Lab Project #1
+ *
+ *
+ *	assigned:	Oct 17, 2016
+ *
+ *	assignmed:	Oct 17, 2016
+ *	due:		Oct 31, 2016
+ *
+ ***********************************************************************/
+
 #include "fun.h"
 
 using namespace std;

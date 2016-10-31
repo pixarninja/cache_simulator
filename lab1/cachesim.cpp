@@ -116,11 +116,12 @@ int main(int argc, char *argv[])
         }
         if(found != tag_max) { //tag matched
             switch(type[i]) {
-            case 'l':
+            case 'l': //read hit
                 cache.load_hits++;
                 break;
-            case 's':
+            case 's': //write hit
                 cache.store_hits++;
+                data[index].tag[j].dirty = true;
                 break;
             default:
                 exit(EXIT_FAILURE);
@@ -130,56 +131,92 @@ int main(int argc, char *argv[])
         }
         else { //tag didn't match
             switch(type[i]) {
-            case 'l':
+            case 'l': //read miss
                 cache.load_misses++;
+                found = 0;
+                for(j = 0; j < cache.ways; j++) {
+                    if(data[index].tag[j].tag == tag_max) { //empty slot found
+                        data[index].tag[j].tag = tag;
+                        data[index].tag[j].index = -1;
+                        for(j = 0; j < data[index].largest; j++) {
+                            data[index].tag[j].index++;
+                        }
+                        data[index].largest++;
+                        if(data[index].largest > cache.ways) { //corrects largest index
+                            data[index].largest = cache.ways;
+                        }
+                        found = 1;
+                        j = cache.ways;
+                    }
+                }
+                if(!found) { //check which policy to use if no empty slot was found
+                    if(cache.miss_policy) { //FIFO
+                        for(j = 0; j < cache.ways; j++) {
+                            if(data[index].tag[j].index == 0) {
+                                data[index].tag[j].tag = tag;
+                                data[index].tag[j].index = data[index].largest;
+                                data[index].tag[j].dirty = false;
+                                for(j = 0; j < data[index].largest; j++) {
+                                    data[index].tag[j].index--;
+                                }
+                            }
+                        }
+                    }
+                    else { //random
+                        j = rand() % cache.ways;
+                        data[index].tag[j].tag = tag;
+                        data[index].tag[j].dirty = false;
+                    }
+                }
                 break;
-            case 's':
+            case 's': // write miss
                 cache.store_misses++;
+                if(cache.write_policy == 1) { //write-allocate
+                    found = 0;
+                    for(j = 0; j < cache.ways; j++) {
+                        if(data[index].tag[j].tag == tag_max) { //empty slot found
+                            data[index].tag[j].tag = tag;
+                            data[index].tag[j].index = -1;
+                            for(j = 0; j < data[index].largest; j++) {
+                                data[index].tag[j].index++;
+                            }
+                            data[index].largest++;
+                            if(data[index].largest > cache.ways) { //corrects largest index
+                                data[index].largest = cache.ways;
+                            }
+                            found = 1;
+                            j = cache.ways;
+                        }
+                    }
+                    if(!found) { //check which policy to use if no empty slot was found
+                        if(cache.miss_policy) { //FIFO
+                            for(j = 0; j < cache.ways; j++) {
+                                if(data[index].tag[j].index == 0) {
+                                    data[index].tag[j].tag = tag;
+                                    data[index].tag[j].index = data[index].largest;
+                                    data[index].tag[j].dirty = true;
+                                    for(j = 0; j < data[index].largest; j++) {
+                                        data[index].tag[j].index--;
+                                    }
+                                }
+                            }
+                        }
+                        else { //random
+                            j = rand() % cache.ways;
+                            data[index].tag[j].tag = tag;
+                            data[index].tag[j].dirty = true;
+                        }
+                    }
+                }
+                else { //no-write-allocate
+                    ;
+                }
                 break;
             default:
                 exit(EXIT_FAILURE);
             }
             cache.total_misses += 1;
             cache.clock_cycles += 1 + last_access[i] + cache.miss_penalty;
-            /* TODO: implement replacement strategies */
-            found = 0;
-            for(j = 0; j < cache.ways; j++) {
-                if(data[index].tag[j].tag == tag_max) { //empty slote found
-                    data[index].tag[j].tag = tag;
-                    //cout << "placing: " << data[index].tag[j].tag << endl;
-                    data[index].tag[j].index = -1;
-                    for(j = 0; j < data[index].largest; j++) {
-                        data[index].tag[j].index++;
-                    }
-                    data[index].largest++;
-                    if(data[index].largest > cache.ways) { //corrects largest index
-                        data[index].largest = cache.ways;
-                    }
-                    //cout << "index: " << index << " largest = " << data[index].largest << endl;
-                    found = 1;
-                    j = cache.ways;
-                }
-            }
-            if(!found) { //check which policy to use if no empty slot was found
-                if(cache.miss_policy) { //FIFO
-                    for(j = 0; j < cache.ways; j++) {
-                        if(data[index].tag[j].index == 0) {
-                            /* TODO: eviction */
-                            //cout << "replacing: " << data[index].tag[j].tag << endl;
-                            data[index].tag[j].tag = tag;
-                            data[index].tag[j].index = data[index].largest;
-                            for(j = 0; j < data[index].largest; j++) {
-                                data[index].tag[j].index--;
-                            }
-                        }
-                    }
-                }
-                else { //random
-                    j = rand() % cache.ways;
-                    data[index].tag[j].tag = tag;
-                    /* TODO: eviction */
-                }
-            }
         }
     }
     /* calculate output */
