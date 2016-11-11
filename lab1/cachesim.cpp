@@ -92,6 +92,10 @@ int main(int argc, char *argv[])
     index_max = pow(2, cache.index);
     tag_max = pow(2, cache.tag);
     /*initialize data structure */
+    if(cache.ways == 0) { //if direct-mapped
+        cache.ways = index_max - 1;
+        index_max = 1;
+    }
     data = new Data [index_max];
     for(i = 0; i < index_max; i++) {
         data[i].data();
