@@ -33,10 +33,13 @@ class Cache
         /* data collection for ouput file */
         unsigned int load_hits;
         unsigned int load_misses;
+        unsigned int load_memory_ops;
         unsigned int store_hits;
         unsigned int store_misses;
+        unsigned int store_memory_ops;
         unsigned int total_hits;
         unsigned int total_misses;
+        unsigned int total_memory_ops;
         unsigned int clock_cycles;
 };
 

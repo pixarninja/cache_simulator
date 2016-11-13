@@ -35,10 +35,13 @@ void Cache::cache()
     this->tag = 0;
     this->load_hits = 0;
     this->load_misses = 0;
+    this->load_memory_ops = 0;
     this->store_hits = 0;
     this->store_misses = 0;
+    this->store_memory_ops = 0;
     this->total_hits = 0;
     this->total_misses = 0;
+    this->total_memory_ops = 0;
     this->clock_cycles = 0;
 }
 
