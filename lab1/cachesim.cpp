@@ -88,14 +88,18 @@ int main(int argc, char *argv[])
     }
     /* configure cache */
     cache.configure(config);
+    if(cache.ways == 0) { //if direct-mapped
+        index_max = 1;
+        cache.ways = 1;
+    }
+    else {
+        index_max = (cache.cache_size / (cache.ways * cache.block_size));
+    }
     cache.calculate_bits(address_size);
+    cout << cache.index << endl;
     index_max = pow(2, cache.index);
     tag_max = pow(2, cache.tag);
     /* initialize data structure */
-    if(cache.ways == 0) { //if direct-mapped
-        cache.ways = index_max - 1;
-        index_max = 1;
-    }
     data = new Data [index_max];
     for(i = 0; i < index_max; i++) {
         data[i].data();

@@ -129,6 +129,7 @@ int main(int argc, char** argv)
       TOTAL_RUN_TIME = TOTAL_RUN_TIME + instructions_between + 1;         //assuming the instructions between all take 1 clock cycle
       
       set_index = ((initial & (set_amount*line_size - line_size))  & address) >> log_base_two((float)line_size);     //gets the set number using math logic
+      printf("set_index = %d\n", set_index);
       tag_value = ((initial ^ (set_amount*line_size - 1)) & address) >> log_base_two((float)(set_amount*line_size)); //gets the tag number using math logic
 
       //if the set associativity is greater than 1 (not direct mapped) this loop will take extra time, no specification was provided on how long searching through the tag bits takes though..
