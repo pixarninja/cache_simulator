@@ -42,11 +42,3 @@ Compilation and Execution Instructions:
    path and the trace file path. The program will output a *.out
    file containing the requested quantities (5 lines in total) in
    the same order as they were in the PDF.
-
-*PLEASE NOTE*
-
-Segfaults sometimes occur when the code is run. This may be due to
-not freeing memory. This affects the completion of the program,
-however the output of the cache simulator is written to and closed
-before the segfault occurs, so the output of the simulator is still valid. I would have debugged this more but I ran out of time. Please
-contact me if you have any questions about it.
